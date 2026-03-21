@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piedra, Papel o Tijera</title>
+    <style>
+        /* Estilos básicos para mejorar la interfaz (Puntos extra por UI) */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin-top: 50px;
+        }
+        .opciones button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            transition: background-color 0.3s;
+        }
+        .opciones button:hover {
+            background-color: #e0e0e0;
+        }
+        #resultado {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 30px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Piedra, Papel o Tijera</h1>
+    <p>¡Elige tu jugada para enfrentarte a la computadora!</p>
+
+    <!-- Botones para que el usuario elija -->
+    <div class="opciones">
+        <button onclick="jugar('Piedra')">🪨 Piedra</button>
+        <button onclick="jugar('Papel')">📄 Papel</button>
+        <button onclick="jugar('Tijera')">✂️ Tijera</button>
+    </div>
+
+    <!-- Aquí se mostrará el resultado -->
+    <div id="resultado"></div>
+
+    <script>
+        // Lógica principal del juego
+        function jugar(eleccionUsuario) {
+            const opciones = ['Piedra', 'Papel', 'Tijera'];
+            
+            // La computadora elige aleatoriamente un número entre 0 y 2
+            const indiceAleatorio = Math.floor(Math.random() * 3);
+            const eleccionComputadora = opciones[indiceAleatorio];
+
+            let mensajeResultado = '';
+
+            // Lógica para determinar el ganador
+            if (eleccionUsuario === eleccionComputadora) {
+                mensajeResultado = "¡Es un empate! 😐";
+            } else if (
+                (eleccionUsuario === 'Piedra' && eleccionComputadora === 'Tijera') ||
+                (eleccionUsuario === 'Papel' && eleccionComputadora === 'Piedra') ||
+                (eleccionUsuario === 'Tijera' && eleccionComputadora === 'Papel')
+            ) {
+                mensajeResultado = "¡Ganaste! 🎉";
+            } else {
+                mensajeResultado = "La computadora gana. 😢";
+            }
+
+            // Actualizar la interfaz de usuario con los resultados
+            document.getElementById('resultado').innerHTML = 
+                `Tú elegiste: <strong>${eleccionUsuario}</strong> <br>
+                 La computadora eligió: <strong>${eleccionComputadora}</strong> <br><br>
+                 ${mensajeResultado}`;
+        }
+    </script>
+</body>
+</html>

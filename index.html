@@ -3,80 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piedra, Papel o Tijera</title>
+    <title>Piedra, Papel o Tijera - El Primero a 3</title>
     <style>
-        /* Estilos básicos para mejorar la interfaz (Puntos extra por UI) */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #f4f4f9;
-            margin-top: 50px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            margin: 0;
+            padding: 50px;
+            min-height: 100vh;
         }
-        .opciones button {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
+        .contenedor {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            max-width: 550px;
+            margin: auto;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
             border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            transition: background-color 0.3s;
+            border: none;
+            margin-bottom: 20px;
+            width: 80%;
+            text-align: center;
         }
-        .opciones button:hover {
-            background-color: #e0e0e0;
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            background-color: #ff9800;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        button:hover {
+            background-color: #e68a00;
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background-color: #777;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #btn-reiniciar {
+            background-color: #4CAF50;
+            display: none;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 15px 30px;
+        }
+        #btn-reiniciar:hover {
+            background-color: #45a049;
+        }
+        #zona-juego {
+            display: none;
+        }
+        .marcador {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .ronda-info {
+            color: #ffeb3b;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         #resultado {
+            font-size: 20px;
+            margin-top: 20px;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+        .suspenso {
+            animation: latido 1s infinite;
+            color: #ffeb3b;
             font-size: 24px;
             font-weight: bold;
-            margin-top: 30px;
-            color: #333;
+        }
+        @keyframes latido {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .ganador-final {
+            font-size: 28px;
+            color: #4CAF50;
+            margin-top: 15px;
+            text-shadow: 1px 1px 2px black;
+        }
+        .creditos {
+            margin-top: 40px; 
+            font-size: 14px; 
+            color: #ccc;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
         }
     </style>
 </head>
 <body>
+    <div class="contenedor">
+        <h1>Torneo: Piedra, Papel o Tijera</h1>
+        
+        <div id="zona-registro">
+            <p>Ingresa tu nombre para comenzar. ¡El primero en llegar a 3 puntos gana!</p>
+            <input type="text" id="input-nombre" placeholder="Tu nombre aquí..." autocomplete="off">
+            <br>
+            <button onclick="iniciarJuego()">¡Comenzar!</button>
+        </div>
 
-    <h1>Piedra, Papel o Tijera</h1>
-    <p>¡Elige tu jugada para enfrentarte a la computadora!</p>
+        <div id="zona-juego">
+            <div class="marcador">
+                <div><span id="nombre-display">Jugador</span>: <span id="puntos-usuario">0</span></div>
+                <div class="ronda-info">Meta: 3 Puntos</div>
+                <div>Computadora: <span id="puntos-computadora">0</span></div>
+            </div>
 
-    <!-- Botones para que el usuario elija -->
-    <div class="opciones">
-        <button onclick="jugar('Piedra')">🪨 Piedra</button>
-        <button onclick="jugar('Papel')">📄 Papel</button>
-        <button onclick="jugar('Tijera')">✂️ Tijera</button>
+            <div id="controles-juego">
+                <p>¡Elige tu jugada!</p>
+                <div class="opciones">
+                    <button class="btn-jugada" onclick="jugar('Piedra')">🪨 Piedra</button>
+                    <button class="btn-jugada" onclick="jugar('Papel')">📄 Papel</button>
+                    <button class="btn-jugada" onclick="jugar('Tijera')">✂️ Tijera</button>
+                </div>
+            </div>
+
+            <div id="resultado"></div>
+            
+            <button id="btn-reiniciar" onclick="reiniciarJuego()">🔄 Jugar de nuevo</button>
+
+            <!-- Créditos del estudiante -->
+            <div class="creditos">
+                Desarrollado por <strong>LUIS MORENO</strong><br>
+                Para la materia de Programación 3
+            </div>
+        </div>
     </div>
 
-    <!-- Aquí se mostrará el resultado -->
-    <div id="resultado"></div>
-
     <script>
-        // Lógica principal del juego
-        function jugar(eleccionUsuario) {
-            const opciones = ['Piedra', 'Papel', 'Tijera'];
-            
-            // La computadora elige aleatoriamente un número entre 0 y 2
-            const indiceAleatorio = Math.floor(Math.random() * 3);
-            const eleccionComputadora = opciones[indiceAleatorio];
+        let puntosUsuario = 0;
+        let puntosComputadora = 0;
+        const PUNTOS_PARA_GANAR = 3; 
+        let nombreJugador = "Jugador";
 
-            let mensajeResultado = '';
-
-            // Lógica para determinar el ganador
-            if (eleccionUsuario === eleccionComputadora) {
-                mensajeResultado = "¡Es un empate! 😐";
-            } else if (
-                (eleccionUsuario === 'Piedra' && eleccionComputadora === 'Tijera') ||
-                (eleccionUsuario === 'Papel' && eleccionComputadora === 'Piedra') ||
-                (eleccionUsuario === 'Tijera' && eleccionComputadora === 'Papel')
-            ) {
-                mensajeResultado = "¡Ganaste! 🎉";
-            } else {
-                mensajeResultado = "La computadora gana. 😢";
+        function iniciarJuego() {
+            const input = document.getElementById('input-nombre').value;
+            if (input.trim() !== "") {
+                nombreJugador = input;
             }
+            document.getElementById('nombre-display').innerText = nombreJugador;
+            document.getElementById('zona-registro').style.display = 'none';
+            document.getElementById('zona-juego').style.display = 'block';
+        }
 
-            // Actualizar la interfaz de usuario con los resultados
-            document.getElementById('resultado').innerHTML = 
-                `Tú elegiste: <strong>${eleccionUsuario}</strong> <br>
-                 La computadora eligió: <strong>${eleccionComputadora}</strong> <br><br>
-                 ${mensajeResultado}`;
+        function jugar(eleccionUsuario) {
+            const botones = document.querySelectorAll('.btn-jugada');
+            botones.forEach(boton => boton.disabled = true);
+
+            const divResultado = document.getElementById('resultado');
+            divResultado.innerHTML = `<div class="suspenso">¡Piedra, papel o tijera...! ⏳</div>`;
+
+            setTimeout(() => {
+                const opciones = ['Piedra', 'Papel', 'Tijera'];
+                const indiceAleatorio = Math.floor(Math.random() * 3);
+                const eleccionComputadora = opciones[indiceAleatorio];
+
+                let mensajeResultado = '';
+
+                if (eleccionUsuario === eleccionComputadora) {
+                    mensajeResultado = "¡EMPATASTE SUERTUDO! 😐"; 
+                } else if (
+                    (eleccionUsuario === 'Piedra' && eleccionComputadora === 'Tijera') ||
+                    (eleccionUsuario === 'Papel' && eleccionComputadora === 'Piedra') ||
+                    (eleccionUsuario === 'Tijera' && eleccionComputadora === 'Papel')
+                ) {
+                    mensajeResultado = "¡GANASTE, AL FIN PEGAS UNA! 🎉";
+                    puntosUsuario++;
+                } else {
+                    mensajeResultado = "ESTA LA PERDISTE PONTE LAS PILAS. 😢";
+                    puntosComputadora++;
+                }
+
+                document.getElementById('puntos-usuario').innerText = puntosUsuario;
+                document.getElementById('puntos-computadora').innerText = puntosComputadora;
+                
+                let htmlResultado = 
+                    `${nombreJugador} eligió: <strong>${eleccionUsuario}</strong> <br>
+                     Computadora eligió: <strong>${eleccionComputadora}</strong> <br><br>
+                     ${mensajeResultado}`;
+
+                if (puntosUsuario === PUNTOS_PARA_GANAR || puntosComputadora === PUNTOS_PARA_GANAR) {
+                    let mensajeFinal = "";
+                    
+                    if (puntosUsuario === PUNTOS_PARA_GANAR) {
+                        mensajeFinal = `<div class="ganador-final">🏆 ¡TENGO QUE FELICITARTE LE ECHASTE BOLAS! 🏆</div>`;
+                    } else {
+                        mensajeFinal = `<div class="ganador-final" style="color: #f44336;">🤖 COÑO VALE NO LLEVASTE VIDA SERA PARA LA PROXIMA. 🤖</div>`;
+                    }
+                    
+                    htmlResultado += `<br><hr>${mensajeFinal}`;
+                    
+                    document.getElementById('controles-juego').style.display = 'none';
+                    document.getElementById('btn-reiniciar').style.display = 'inline-block';
+                } else {
+                    botones.forEach(boton => boton.disabled = false);
+                }
+
+                divResultado.innerHTML = htmlResultado;
+
+            }, 1500);
+        }
+
+        function reiniciarJuego() {
+            puntosUsuario = 0;
+            puntosComputadora = 0;
+
+            document.getElementById('puntos-usuario').innerText = 0;
+            document.getElementById('puntos-computadora').innerText = 0;
+            document.getElementById('resultado').innerHTML = "";
+
+            document.getElementById('btn-reiniciar').style.display = 'none';
+            document.getElementById('controles-juego').style.display = 'block';
+
+            const botones = document.querySelectorAll('.btn-jugada');
+            botones.forEach(boton => boton.disabled = false);
         }
     </script>
 </body>
